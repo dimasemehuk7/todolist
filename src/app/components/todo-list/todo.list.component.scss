@@ -1,0 +1,32 @@
+.todolist-table {
+  td {
+    vertical-align: middle;
+  }
+
+  .todo-status {
+    text-align: right;
+  }
+
+  .todo-actions {
+    width: 10%;
+    text-align: center;
+  }
+
+  .todo-actions-header {
+    text-align: right;
+  }
+}
+
+.todo-actions-btn {
+  &::after {
+    display: none;
+  }
+}
+
+.todo-title {
+  width: 90%;
+}
+
+.dropdown-item-icon {
+  margin-right: 10px;
+}
