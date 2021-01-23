@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Todo} from '../../models/todo';
 import {TodoStatus} from '../../models/todo-status';
 import {TodoRestService} from '../../rest/todo-rest.service';
-import {Observable} from 'rxjs';
+import {interval, Observable} from 'rxjs';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-todo-list',
@@ -14,22 +15,30 @@ export class TodoListComponent implements OnInit {
   public todos$: Observable<Todo[]>;
 
   constructor(private todoRestService: TodoRestService) {
-    console.log('test');
     this.todos$ = todoRestService.getAll$();
   }
 
   ngOnInit(): void {}
 
   onRemoveClick(todo: Todo): void {
-    // this.todoRestService.remove(todo);
+    const todoToRemove = {...todo, todo};
+    this.todoRestService.remove$(todoToRemove).subscribe((removedTodo: Todo) => {
+      this.todos$ = this.todoRestService.getAll$();
+    });
   }
 
   onCheckBoxClick(todo: Todo): void {
-    // this.todoRestService.makeDone(todo);
+    const todoToUpdate = {...todo, status: TodoStatus.DONE};
+    this.todoRestService.update$(todoToUpdate).subscribe((updatedTodo: Todo) => {
+      this.todos$ = this.todoRestService.getAll$();
+    });
   }
 
   onStartClick(todo: Todo): void {
-    // this.todoRestService.startTodo(todo);
+    const todoToUpdate = {...todo, status: TodoStatus.IN_PROGRESS};
+    this.todoRestService.update$(todoToUpdate).subscribe((updatedTodo: Todo) => {
+      this.todos$ = this.todoRestService.getAll$();
+    });
   }
 
   isDone(todo: Todo): boolean {
