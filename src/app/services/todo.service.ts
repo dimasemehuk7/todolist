@@ -1,37 +1,47 @@
 import {Todo} from '../models/todo';
 import {Injectable} from '@angular/core';
 import {TodoStatus} from '../models/todo-status';
+import {BehaviorSubject, fromEvent, Observable, of} from 'rxjs';
+import {TodoRestService} from '../rest/todo-rest.service';
+import {tap} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class TodoService {
 
-  public todos: Todo[];
+  public todos$: BehaviorSubject<Todo[]>;
 
-  constructor() {
-    this.todos = [
-      {id: '123', title: 'Todo title 123', status: TodoStatus.IN_PROGRESS},
-      {id: '124', title: 'Todo title 1254', status: TodoStatus.NOT_STARTED},
-      {id: '125', title: 'Todo title 125', status: TodoStatus.DONE},
-      {id: '126', title: 'Todo title 126', status: TodoStatus.IN_PROGRESS},
-      {id: '127', title: 'Todo title 127', status: TodoStatus.DONE},
-      {id: '128', title: 'Todo title 128', status: TodoStatus.DONE}
-    ];
+  constructor(private todoRestService: TodoRestService) {
+    this.todos$ = new BehaviorSubject<Todo[]>([]);
+    const all$: Observable<Todo[]> = this.todoRestService.getAll$();
+    all$.subscribe((todos: Todo[]) => {
+      this.todos$.next(todos);
+    });
   }
 
-  remove(todo: Todo): void {
-    const indexToRemove = this.todos.indexOf(todo);
-    this.todos.splice(indexToRemove, 1);
+  remove$(todoId: string): Observable<Todo> {
+    return this.todoRestService.remove$(todoId).pipe(tap(() => {
+      let todos: Todo[] = this.todos$.getValue();
+      todos = todos.filter(todo => todo.id !== todoId);
+      this.todos$.next(todos);
+    }));
   }
 
-  create(title: string): void {
-    this.todos.push({id: null, title, status: TodoStatus.NOT_STARTED});
+  create$(title: string): Observable<Todo> {
+    const todo: Todo = {id: null, title, status: TodoStatus.NOT_STARTED};
+    return this.todoRestService.create$(todo).pipe(tap((newTodo: Todo) => {
+      const todos: Todo[] = this.todos$.getValue();
+      todos.push(newTodo);
+      this.todos$.next(todos);
+    }));
   }
 
-  makeDone(todo: Todo): void {
-    todo.status = TodoStatus.DONE;
-  }
-
-  startTodo(todo: Todo): void {
-    todo.status = TodoStatus.IN_PROGRESS;
+  update$(todo: Todo): Observable<Todo> {
+    return this.todoRestService.update$(todo).pipe(
+      tap((updatedTodo: Todo) => {
+        const todos: Todo[] = this.todos$.getValue();
+        const newTodos: Todo[] = todos.map(t => t.id === updatedTodo.id ? updatedTodo : t);
+        this.todos$.next(newTodos);
+      })
+    );
   }
 }

@@ -1,4 +1,5 @@
 import {Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {TodoService} from '../../services/todo.service';
 
 @Component({
   selector: 'app-todo-form',
@@ -7,17 +8,15 @@ import {Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@a
 export class TodoFormComponent implements OnInit {
 
   @ViewChild('titleInput') titleInput: ElementRef<HTMLInputElement>;
-  @Output() create: EventEmitter<string>;
 
-  constructor() {
-    this.create = new EventEmitter<string>();
-  }
+  constructor(private todoService: TodoService) {}
 
   ngOnInit(): void {}
 
   onCreateClick(): void {
     const title = this.titleInput.nativeElement.value;
-    this.create.emit(title);
-    this.titleInput.nativeElement.value = '';
+    this.todoService.create$(title).subscribe(() => {
+      this.titleInput.nativeElement.value = '';
+    });
   }
 }
