@@ -1,7 +1,6 @@
 import {Todo} from '../models/todo';
 import {Injectable} from '@angular/core';
-import {TodoStatus} from '../models/todo-status';
-import {BehaviorSubject, fromEvent, Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {TodoRestService} from '../rest/todo-rest.service';
 import {tap} from 'rxjs/operators';
 
@@ -18,7 +17,7 @@ export class TodoService {
     });
   }
 
-  remove$(todoId: string): Observable<Todo> {
+  remove$(todoId: number): Observable<Todo> {
     return this.todoRestService.remove$(todoId).pipe(tap(() => {
       let todos: Todo[] = this.todos$.getValue();
       todos = todos.filter(todo => todo.id !== todoId);
@@ -26,8 +25,7 @@ export class TodoService {
     }));
   }
 
-  create$(title: string): Observable<Todo> {
-    const todo: Todo = {id: null, title, status: TodoStatus.NOT_STARTED};
+  create$(todo: Todo): Observable<Todo> {
     return this.todoRestService.create$(todo).pipe(tap((newTodo: Todo) => {
       const todos: Todo[] = this.todos$.getValue();
       todos.push(newTodo);

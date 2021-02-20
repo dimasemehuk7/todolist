@@ -1,0 +1,28 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">{{title}}</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form>
+    <div class="mb-3">
+      <label for="title" class="form-label">Title:</label>
+      <input id="title" autocomplete="off" type="text" class="form-control" placeholder="title"
+             name="title" [(ngModel)]="todoTitle">
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description:</label>
+      <textarea id="description" class="form-control" placeholder="description"
+                rows="4" name="description" [(ngModel)]="todoDescription"></textarea>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <div class="buttons">
+    <button class="btn btn-outline-primary pull-right" type="button" (click)="modalRef.hide()">CANCEL</button>
+    <button class="btn btn-primary pull-right create-btn" (click)="onSubmitClick()">
+      {{isCreateMode() ? 'CREATE' : 'SAVE'}}
+    </button>
+  </div>
+</div>

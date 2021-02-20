@@ -1,13 +1,16 @@
 .todolist-table {
   td {
-    vertical-align: middle;
+    vertical-align: top;
+    border: none;
   }
 
   .todo-status {
+    border: none;
     text-align: right;
   }
 
   .todo-actions {
+    border: none;
     width: 10%;
     text-align: center;
   }
@@ -25,8 +28,14 @@
 
 .todo-title {
   width: 90%;
+  border: none;
 }
 
 .dropdown-item-icon {
   margin-right: 10px;
+}
+
+.description {
+  width: 100%;
+  text-align: left;
 }

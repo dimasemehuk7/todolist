@@ -1,38 +1,9 @@
 {
   "todos": [
     {
-      "id": "1",
-      "title": "fdfd",
-      "status": "DONE"
-    },
-    {
-      "title": "New title",
-      "status": "DONE",
-      "id": "7jphqne"
-    },
-    {
-      "id": "h_3FUqI",
-      "title": "gsdsdg",
-      "status": "NOT_STARTED"
-    },
-    {
-      "id": "gmEQJYT",
-      "title": "sdfsdfsdf",
-      "status": "NOT_STARTED"
-    },
-    {
-      "id": "Q3A0G1R",
-      "title": "sdfsdgsdg",
-      "status": "NOT_STARTED"
-    },
-    {
-      "id": "x8wwN9I",
-      "title": "dgdgdgdg",
-      "status": "NOT_STARTED"
-    },
-    {
-      "id": "lzaRVmF",
-      "title": "dgsdgsdgsg",
+      "id": 4,
+      "title": "GGGGGGG",
+      "description": "AAAAAAAA",
       "status": "NOT_STARTED"
     }
   ]

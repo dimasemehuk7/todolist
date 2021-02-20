@@ -20,7 +20,7 @@ export class TodoRestService {
     return this.http.put<Todo>(`api/todos/${todo.id}`, todo);
   }
 
-  remove$(todoId: string): Observable<Todo> {
+  remove$(todoId: number): Observable<Todo> {
     return this.http.delete<Todo>(`api/todos/${todoId}`);
   }
 }

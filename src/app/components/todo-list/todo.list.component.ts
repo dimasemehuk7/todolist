@@ -3,6 +3,9 @@ import {Todo} from '../../models/todo';
 import {TodoStatus} from '../../models/todo-status';
 import {Observable} from 'rxjs';
 import {TodoService} from '../../services/todo.service';
+import {TodoDialogComponent} from '../../dialogs/new-todo/todo-dialog.component';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {TodoDialogMode} from '../../models/todo-dialog-mode';
 
 @Component({
   selector: 'app-todo-list',
@@ -11,9 +14,11 @@ import {TodoService} from '../../services/todo.service';
 })
 export class TodoListComponent {
 
+  public modalRef: BsModalRef;
   public todos$: Observable<Todo[]>;
 
-  constructor(private todoService: TodoService) {
+  constructor(private todoService: TodoService,
+              private modalService: BsModalService) {
     this.todos$ = todoService.todos$;
   }
 
@@ -29,6 +34,11 @@ export class TodoListComponent {
   onStartClick(todo: Todo): void {
     const todoToUpdate = {...todo, status: TodoStatus.IN_PROGRESS};
     this.todoService.update$(todoToUpdate).subscribe();
+  }
+
+  onEditClick(todo: Todo): void {
+    const initialState = {title: 'Edit todo', todo, mode: TodoDialogMode.EDIT};
+    this.modalRef = this.modalService.show(TodoDialogComponent, {initialState});
   }
 
   isDone(todo: Todo): boolean {
